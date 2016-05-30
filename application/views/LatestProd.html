@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+</head>
+<body>
+   
+   <table>
+				<caption style="color:red;font-size: 25px;font-weight: bold;">Product Information</caption>
+					<?php
+					  
+					   $rec = $latProd;
+					   $r = $rec['res'];
+					   foreach($r as $d){
+					   ?>
+						<tr>
+							<td style="color:Orange;"><?php echo $d->Gadget_name; ?></td>
+						</tr>
+						<tr>
+							<td style="color:white;">Camera</td><td style="color:Orange;"><?php echo $d->Camera; ?>px</td>
+						</tr>
+						<tr>
+							<td style="color:white;">Resolution</td><td style="color:Orange;"><?php echo $d->Height; ?>x<?php echo $d->Width; ?>mm</td>
+						</tr>
+						<tr>
+							<td style="color:white;">Display</td><td style="color:Orange;"><?php echo $d->Display; ?></td>
+						</tr>
+						<tr>
+							<td style="color:white;">Description</td><td style="color:Orange;"><?php echo $d->DESCRIPTION; ?></td>
+						</tr>
+						<?php } ?>
+	</table>
+   
+</body>
+</html>

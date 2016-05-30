@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script>
+		    
+		    $(document).ready(function(){
+			     movieId;
+                
+				// Comment function
+				$("#btn").click(function(event){
+				val = parseFloat($('#rate').val());
+				 c = $('#comments').val();
+					 $.ajax({
+					 type:"post",
+					 dataType:"json",
+					 url:"http://localhost/ci/index.php/CommentsUpdate/update",
+					 data: {'id':movieId,'comm':c,'rate':val},
+					 
+					 success: function(data){						
+						try{
+							if(data.update == false){
+							   alert('You Must be Logged In to Comment');
+							}
+						}
+						catch(e) 
+						{		
+							alert(e);
+						}},
+					error: function(jqXhr){
+							//alert("Error while sending request");
+						}
+					 });	
+				})
+               
+			   
+			   
+                // Like Function
+				$(".like").click(function(event){
+				    commId = $(this).attr("id");
+					
+					
+					bliked = 0;
+					if($(this).text() == 'Like'){
+					  bliked = 1;  
+					}
+					if($(this).text() == 'Dislike'){
+					  bliked = 0;
+					}
+					
+					$.ajax({
+					 type:"post",
+					 dataType:"json",
+					 url:"http://localhost/ci/index.php/LikesUpdate/like",
+					 data: {'mid':movieId,'comID':commId,'torf':bliked},
+					 
+					 success: function(json){						
+						try{
+							if(json.like == false)
+							{
+							  alert('You Must be Logged In to Like');
+							}
+							if(json.like == true)
+							{
+							  //alert(json.val);
+							}
+							else{
+							  //alert(json);
+							}
+						}
+						catch(e) 
+						{		
+							//alert(e);
+						}},
+					error: function(jqXhr){
+							//alert("Error when sending request");
+						}
+					 });
+				});
+			   
+			});
+		</script>
+	</head>
+	<body>
+		<div id="container">
+
+			<table align="center">
+				<caption style="color:red;font-size: 25px;font-weight: bold;">Movie Info</caption>
+					<?php
+					   $rec = $datad;
+					   $r = $rec['records'];
+					   $s = $r['movieinfo'];
+					   foreach($s as $d){
+					   ?>
+					   <script>
+					      movieId = <?php echo $d->Movie_id;?>;
+						  
+					   </script>
+						<tr>
+							<td style="color:white;">Movie</td><td style="color:green;"><?php echo $d->Movie_name; ?></td>
+						</tr>
+						<tr>
+							<td style="color:white;">Director</td><td style="color:green;"><?php echo $d->Director; ?></td>
+						</tr>
+						<tr>
+							<td style="color:white;">Music_Director</td><td style="color:green;"><?php echo $d->Music_Director; ?></td>
+						</tr>
+						<tr>
+							<td style="color:white;">DESCRIPTION</td><td style="color:green;"><?php echo $d->DESCRIPTION; ?></td>
+						</tr>
+						<tr>
+							<td style="color:white;">Ratings</td><td style="color:green;"><?php echo $d->Ratings; ?></td>
+						</tr>
+						<tr>
+							<td style="color:white;">Lang_id</td><td style="color:green;"><?php echo $d->Lang_id; ?></td>
+						</tr>
+			</table>
+				<?php } ?>
+			<form name="FormRatings" id="userForm" action="">	
+			</br>
+			</br>
+			<table>
+				<caption style="color:red;font-size: 25px;font-weight: bold;">Ratings Information</caption>
+					<?php
+						   $rec = $datad;
+						   $r = $rec['records'];
+						   $s = $r['ratings'];
+						   foreach($s as $d){
+					?>
+					<tr>
+						<td style="color:Orange;"><?php echo $d->FNAME; ?></td>
+						<td style="color:Orange;"><?php echo $d->LNAME; ?></td>
+						<td style="color:Orange;"><?php echo $d->Comments; ?></td>
+						<td><a style="color:white;" 
+						       href="" 
+							   id=<?php echo $d->CID;?> 
+							   class="like">Like</a></td>
+						<td style="color:#E6E600;"><?php echo $d->No_Likes; ?></td>
+						<td><a style="color:white;" href="" id=<?php echo $d->CID;?> class="like">Dislike</a></td>
+						<td style="color:#E6E600;"><?php echo $d->No_Dislikes; ?></td>
+						
+					</tr>
+					<?php } ?>
+					<tr>
+						<td colspan="3"><textarea rows="1" cols="50" id="comments">Comment Here</textarea></td>
+						<td><button id="btn">post</button></td>
+						<td><input type="text" id="rate"/></td>
+					</tr>
+            </table>
+            </form>			
+		</div>
+	</body>
+</html>
